@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTime>
 #include <QTimer>
 #include "qesp/qextserialport.h"
 
@@ -25,6 +26,8 @@ private slots:
 	void receiveMsg();
 	void transmitMsg();
 	void moveTo();
+	void calibrate();
+	void home();
 };
 
 #endif // MAINWINDOW_H

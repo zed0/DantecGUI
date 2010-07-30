@@ -83,3 +83,64 @@ void MainWindow::moveTo()
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
 }
+
+void MainWindow::calibrate()
+{
+	int originalX = ui->horizontalSlider->value();
+	int originalY = ui->horizontalSlider->value();
+	int originalZ = ui->horizontalSlider->value();
+
+	int currentX = originalX;
+	int currentY = originalY;
+	int currentZ = originalZ;
+
+	int increment = 2;
+	QTime myTimer;
+	myTimer.start();
+
+	while(currentX <= 100 && currentY <= 100 && currentZ <= 100)
+	{
+		currentX += increment;
+		currentY += increment;
+		currentZ += increment;
+
+		QString text = "@0M";
+		text.append(QString::number(currentX*160*6));
+		text.append(",4000,");
+		text.append(QString::number(currentY*160*6));
+		text.append(",4000,");
+		text.append(QString::number(currentZ*160*6));
+		text.append(",4000,0,2500");
+		text.append("\x0D\x0A");
+		int i = commPort->writeData(text.toAscii(), text.length());
+		ui->textBrowser->append("-> "+text);
+		qDebug(text.toAscii());
+		qDebug("trasmitted : %d", i);
+		while(myTimer.elapsed() < 4000)
+		{
+		}
+		myTimer.restart();
+	}
+
+	QString text = "@0M";
+	text.append(QString::number(originalX*160*6));
+	text.append(",4000,");
+	text.append(QString::number(originalY*160*6));
+	text.append(",4000,");
+	text.append(QString::number(originalZ*160*6));
+	text.append(",4000,0,2500");
+	text.append("\x0D\x0A");
+	int i = commPort->writeData(text.toAscii(), text.length());
+	ui->textBrowser->append("-> "+text);
+	qDebug(text.toAscii());
+	qDebug("trasmitted : %d", i);
+}
+
+void MainWindow::home()
+{
+	QString text = "@0R7\x0D\x0A";
+	int i = commPort->writeData(text.toAscii(), text.length());
+	ui->textBrowser->append("-> "+text);
+	qDebug(text.toAscii());
+	qDebug("trasmitted : %d", i);
+}

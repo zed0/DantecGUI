@@ -89,6 +89,20 @@
       </property>
      </widget>
     </item>
+    <item row="6" column="3">
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="text">
+       <string>Calibrate</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="text">
+       <string>Home</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>
@@ -170,8 +184,8 @@
      <y>68</y>
     </hint>
     <hint type="destinationlabel">
-     <x>339</x>
-     <y>66</y>
+     <x>343</x>
+     <y>82</y>
     </hint>
    </hints>
   </connection>
@@ -223,9 +237,59 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>calibrate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>458</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>480</x>
+     <y>88</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>pushButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>324</x>
+     <y>391</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>407</x>
+     <y>391</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>home()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>458</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>16</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>transmitMsg()</slot>
   <slot>moveTo()</slot>
+  <slot>calibrate()</slot>
+  <slot>home()</slot>
  </slots>
 </ui>
