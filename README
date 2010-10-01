@@ -1,0 +1,2 @@
+Requires QextSerialPort ( http://code.google.com/p/qextserialport/ )
+Does not yet work with less than three axes.
