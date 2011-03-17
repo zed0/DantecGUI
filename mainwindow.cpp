@@ -14,25 +14,25 @@ MainWindow::MainWindow(QWidget *parent) :
 	commPort->setFlowControl(FLOW_HARDWARE);
 	commPort->setStopBits(STOP_1);
 	commPort->setBaudRate(BAUD9600);
-	commPort->open();
+        commPort->open(QIODevice::ReadWrite);
 
 	QTimer *receiveTimer = new QTimer(this);
 	connect(receiveTimer, SIGNAL(timeout()), SLOT(receiveMsg()));
 	receiveTimer->start(0);
 	QString text = "@07\x0D\x0A";
-	int i = commPort->writeData(text.toAscii(), text.length());
+        int i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
 
 	text = "@0d4000,4000,4000\x0D\x0A";
-	i = commPort->writeData(text.toAscii(), text.length());
+        i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
 
 	text = "@0R7\x0D\x0A";
-	i = commPort->writeData(text.toAscii(), text.length());
+        i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
@@ -50,7 +50,7 @@ void MainWindow::receiveMsg()
 		if(numBytes > 80) numBytes = 80;
 		char buff[80];
 
-		int i = commPort->readData(buff, numBytes);
+                int i = commPort->read(buff, numBytes);
 		buff[numBytes] = '\0';
 		QString msg = buff;
 
@@ -62,7 +62,7 @@ void MainWindow::receiveMsg()
 void MainWindow::transmitMsg()
 {
 	QString text = ui->lineEdit->text()+"\x0D\x0A";
-	int i = commPort->writeData(text.toAscii(), text.length());
+        int i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
@@ -78,7 +78,7 @@ void MainWindow::moveTo()
 	text.append(QString::number(ui->horizontalSlider_3->value()*160*6));
 	text.append(",4000,0,2500");
 	text.append("\x0D\x0A");
-	int i = commPort->writeData(text.toAscii(), text.length());
+        int i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
@@ -112,7 +112,7 @@ void MainWindow::calibrate()
 		text.append(QString::number(currentZ*160*6));
 		text.append(",4000,0,2500");
 		text.append("\x0D\x0A");
-		int i = commPort->writeData(text.toAscii(), text.length());
+                int i = commPort->write(text.toAscii(), text.length());
 		ui->textBrowser->append("-> "+text);
 		qDebug(text.toAscii());
 		qDebug("trasmitted : %d", i);
@@ -130,7 +130,7 @@ void MainWindow::calibrate()
 	text.append(QString::number(originalZ*160*6));
 	text.append(",4000,0,2500");
 	text.append("\x0D\x0A");
-	int i = commPort->writeData(text.toAscii(), text.length());
+        int i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
@@ -139,7 +139,7 @@ void MainWindow::calibrate()
 void MainWindow::home()
 {
 	QString text = "@0R7\x0D\x0A";
-	int i = commPort->writeData(text.toAscii(), text.length());
+        int i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);

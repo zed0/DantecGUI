@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QTime>
 #include <QTimer>
-#include "qesp/qextserialport.h"
+#include "qextserialport.h"
 
 namespace Ui {
 	class MainWindow;
