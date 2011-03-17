@@ -14,25 +14,21 @@ MainWindow::MainWindow(QWidget *parent) :
 	commPort->setFlowControl(FLOW_HARDWARE);
 	commPort->setStopBits(STOP_1);
 	commPort->setBaudRate(BAUD9600);
-        commPort->open(QIODevice::ReadWrite);
+	commPort->open(QIODevice::ReadWrite);
 
 	QTimer *receiveTimer = new QTimer(this);
 	connect(receiveTimer, SIGNAL(timeout()), SLOT(receiveMsg()));
 	receiveTimer->start(0);
 	QString text = "@07\x0D\x0A";
-        int i = commPort->write(text.toAscii(), text.length());
+	int i = commPort->write(text.toAscii(), text.length());
+	ui->textBrowser->append("Sending ready signal...");
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
 
 	text = "@0d4000,4000,4000\x0D\x0A";
-        i = commPort->write(text.toAscii(), text.length());
-	ui->textBrowser->append("-> "+text);
-	qDebug(text.toAscii());
-	qDebug("trasmitted : %d", i);
-
-	text = "@0R7\x0D\x0A";
-        i = commPort->write(text.toAscii(), text.length());
+	i = commPort->write(text.toAscii(), text.length());
+	ui->textBrowser->append("Sending calibration values...");
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
@@ -50,7 +46,7 @@ void MainWindow::receiveMsg()
 		if(numBytes > 80) numBytes = 80;
 		char buff[80];
 
-                int i = commPort->read(buff, numBytes);
+		int i = commPort->read(buff, numBytes);
 		buff[numBytes] = '\0';
 		QString msg = buff;
 
@@ -62,7 +58,7 @@ void MainWindow::receiveMsg()
 void MainWindow::transmitMsg()
 {
 	QString text = ui->lineEdit->text()+"\x0D\x0A";
-        int i = commPort->write(text.toAscii(), text.length());
+	int i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
@@ -71,14 +67,36 @@ void MainWindow::transmitMsg()
 void MainWindow::moveTo()
 {
 	QString text = "@0M";
-	text.append(QString::number(ui->horizontalSlider->value()*160*6));
+		if(ui->checkBox->isChecked())
+		{
+			text.append(QString::number(ui->horizontalSlider->value()*16));
+		}
+		else
+		{
+			text.append("0");
+		}
 	text.append(",4000,");
-	text.append(QString::number(ui->horizontalSlider_2->value()*160*6));
+		if(ui->checkBox_2->isChecked())
+		{
+			text.append(QString::number(ui->horizontalSlider_2->value()*16));
+		}
+		else
+		{
+			text.append("0");
+		}
 	text.append(",4000,");
-	text.append(QString::number(ui->horizontalSlider_3->value()*160*6));
-	text.append(",4000,0,2500");
+		if(ui->checkBox_3->isChecked())
+		{
+			text.append(QString::number(ui->horizontalSlider_3->value()*16));
+		}
+		else
+		{
+			text.append("0");
+		}
+		text.append(",4000,0,2500");
 	text.append("\x0D\x0A");
-        int i = commPort->write(text.toAscii(), text.length());
+	int i = commPort->write(text.toAscii(), text.length());
+	ui->textBrowser->append("Moving...");
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
@@ -112,7 +130,7 @@ void MainWindow::calibrate()
 		text.append(QString::number(currentZ*160*6));
 		text.append(",4000,0,2500");
 		text.append("\x0D\x0A");
-                int i = commPort->write(text.toAscii(), text.length());
+		int i = commPort->write(text.toAscii(), text.length());
 		ui->textBrowser->append("-> "+text);
 		qDebug(text.toAscii());
 		qDebug("trasmitted : %d", i);
@@ -130,7 +148,7 @@ void MainWindow::calibrate()
 	text.append(QString::number(originalZ*160*6));
 	text.append(",4000,0,2500");
 	text.append("\x0D\x0A");
-        int i = commPort->write(text.toAscii(), text.length());
+	int i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
@@ -138,8 +156,14 @@ void MainWindow::calibrate()
 
 void MainWindow::home()
 {
-	QString text = "@0R7\x0D\x0A";
-        int i = commPort->write(text.toAscii(), text.length());
+	int axes = 0;
+	axes += ui->checkBox->isChecked();
+	axes += ui->checkBox_2->isChecked()*2;
+	axes += ui->checkBox_3->isChecked()*4;
+
+	QString text = "@0R"+QString::number(axes)+"\x0D\x0A";
+	int i = commPort->write(text.toAscii(), text.length());
+	ui->textBrowser->append("Going to home position...");
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
