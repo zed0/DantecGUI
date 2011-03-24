@@ -1,2 +1,1 @@
-Requires QextSerialPort ( http://code.google.com/p/qextserialport/ )
-Does not yet work with less than three axes.
+Requires QextSerialPort ( http://code.google.com/p/qextserialport/ ), now included in the project as it was moving too fast to keep up with.
