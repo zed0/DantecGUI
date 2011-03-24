@@ -66,37 +66,33 @@ void MainWindow::transmitMsg()
 
 void MainWindow::moveTo()
 {
+	int x = 0;
+	int y = 0;
+	int z = 0;
+	if(ui->checkBox->isChecked())
+	{
+		x = ui->horizontalSlider->value();
+	}
+	if(ui->checkBox_2->isChecked())
+	{
+		y = ui->horizontalSlider_2->value();
+	}
+	if(ui->checkBox_3->isChecked())
+	{
+		z = ui->horizontalSlider_3->value();
+	}
+
 	QString text = "@0M";
-		if(ui->checkBox->isChecked())
-		{
-			text.append(QString::number(ui->horizontalSlider->value()*16));
-		}
-		else
-		{
-			text.append("0");
-		}
+	text.append(QString::number(x*16));
 	text.append(",4000,");
-		if(ui->checkBox_2->isChecked())
-		{
-			text.append(QString::number(ui->horizontalSlider_2->value()*16));
-		}
-		else
-		{
-			text.append("0");
-		}
+	text.append(QString::number(y*16));
 	text.append(",4000,");
-		if(ui->checkBox_3->isChecked())
-		{
-			text.append(QString::number(ui->horizontalSlider_3->value()*16));
-		}
-		else
-		{
-			text.append("0");
-		}
-		text.append(",4000,0,2500");
+	text.append(QString::number(y*16));
+	text.append(",4000,0,2500");
 	text.append("\x0D\x0A");
+
 	int i = commPort->write(text.toAscii(), text.length());
-	ui->textBrowser->append("Moving...");
+	ui->textBrowser->append(QString("Moving to ")+QString::number(x)+","+QString::number(y)+","+QString::number(z)+"...");
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
