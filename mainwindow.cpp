@@ -26,12 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);
 
-	text = "@0d4000,4000,4000\x0D\x0A";
-	i = commPort->write(text.toAscii(), text.length());
-	ui->textBrowser->append("Sending calibration values...");
-	ui->textBrowser->append("-> "+text);
-	qDebug(text.toAscii());
-	qDebug("trasmitted : %d", i);
+	QTimer::singleShot(300, this, SLOT(sendCalibrate()));
 }
 
 MainWindow::~MainWindow()
@@ -160,6 +155,17 @@ void MainWindow::home()
 	QString text = "@0R"+QString::number(axes)+"\x0D\x0A";
 	int i = commPort->write(text.toAscii(), text.length());
 	ui->textBrowser->append("Going to home position...");
+	ui->textBrowser->append("-> "+text);
+	qDebug(text.toAscii());
+	qDebug("trasmitted : %d", i);
+}
+
+void MainWindow::sendCalibrate()
+{
+	QString text;
+	text = "@0d4000,4000,4000\x0D\x0A";
+	int i = commPort->write(text.toAscii(), text.length());
+	ui->textBrowser->append("Sending calibration values...");
 	ui->textBrowser->append("-> "+text);
 	qDebug(text.toAscii());
 	qDebug("trasmitted : %d", i);

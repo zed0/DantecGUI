@@ -27,6 +27,7 @@ private slots:
 	void transmitMsg();
 	void moveTo();
 	void calibrate();
+	void sendCalibrate();
 	void home();
 };
 
